@@ -6,15 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@android:color/darker_gray"
     tools:context="com.example.app.jasper.voicetotext.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="vertical"
-        android:layout_gravity="center_horizontal">
+        android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -25,50 +22,42 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:adjustViewBounds="true"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-            <ImageButton
-                android:id="@+id/recordButton"
-                style="@android:style/Widget.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="60dp"
-                android:longClickable="true"
-                android:onClick="onClickRecord"
-                android:tint="@color/colorBackgroundDark"
-                android:background="@drawable/btn_rounded40dp"
-                app:srcCompat="@android:drawable/ic_btn_speak_now"/>
-
-            <Button
-                android:id="@+id/copyButton"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="onClickCopy"
-                android:text="copy text"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="148dp"
-                tools:layout_editor_absoluteY="153dp"
-                android:background="@drawable/rounded_edges"/>
-
-            <EditText
-                android:id="@+id/textContainer"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_weight="0.8"
-                android:layout_height="wrap_content"
-                android:contentDescription="text will be displayed here"
-                android:text="...Textausgabe"
-                android:textAlignment="viewStart"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="218dp" />
 
 
+        <ImageButton
+            android:id="@+id/recordButton"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/round_btn_60dp"
+            android:onClick="onClickRecord"
+            android:tint="@color/colorBackgroundDark"
+            app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+        <Button
+            android:id="@+id/copyButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_edges"
+            android:onClick="onClickCopy"
+            android:text="copy text"
+            android:layout_marginTop="30dp"/>
+
+        <EditText
+            android:id="@+id/textContainer"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="text will be displayed here"
+            android:text="...Textausgabe"/>
 
 
     </LinearLayout>
