@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">VoiceToText</string>
     <string name="action_settings">Settings</string>
+    
+    <string-array name="languageList">
+        <item>GERMAN</item>
+        <item>ENGLISH</item>
+        <item>FRENCH</item>
+        <item>SPANISH</item>
+        <item>ITALIAN</item>
+        <item>FINNISH</item>
+    </string-array>
 </resources>

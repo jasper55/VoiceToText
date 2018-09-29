@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,13 +15,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,16 +34,18 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText textField;
-    Button copyTextButton;
-    boolean isRecording = false;
+    private EditText textField;
+    private Button copyTextButton;
+    private boolean isRecording = false;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
     public static final String recordAudioPermission = Manifest.permission.RECORD_AUDIO;
     public static final String internetPermission = Manifest.permission.INTERNET;
 
-    String[] langList = {"GERMAN","ENGLISH","FRENCH"};
-    String language = "GERMAN";
+    private ArrayAdapter<String> languageListAdapter;
+    private String language = "GERMAN";
+    private AlertDialog AlertDialogActions;
+    private Spinner languageSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.layout_main);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground);
-        //toolbar.setTitle(R.string.app_name);
-        //getSupportActionBar().setIcon(getDrawable(R.drawable.ic_launcher_foreground));
-        //getSupportActionBar().setTitle(R.string.app_name);
 
         textField = (EditText) findViewById(R.id.textContainer);
         copyTextButton = (Button)findViewById(R.id.copyButton);
@@ -58,10 +61,6 @@ public class MainActivity extends AppCompatActivity {
         requestPermission();
 
     }   // onCreate()
-
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
@@ -109,17 +107,16 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Intent recordIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 // Art und Weise, welchen Text man als Rückgabe erhällt
-                recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-                //recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                //recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+                recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                //recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-                recordIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100);
-                //recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, setLanguage(language));
-                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Jetzt Sprechen");
+                recordIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, REQ_CODE_SPEECH_INPUT);
+                recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+                Log.i("Language", language);
+                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now");
 
                 startActivityForResult(recordIntent, REQ_CODE_SPEECH_INPUT);
-                Toast.makeText(this, "Activity started", Toast.LENGTH_SHORT).show();
-
 
 
             } catch(ActivityNotFoundException e) {
@@ -140,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             isRecording = false;
         }
     }
-
 
     private void requestPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(this, recordAudioPermission);
@@ -165,22 +161,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Sprache wählen
+    private String chooseLanguage (){
 
-    private String chooseLanguage (String[] langlist, int i){
-        String chosenLanguage = langlist[i];
-        this.language = chosenLanguage;
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View spinnerView = getLayoutInflater().inflate(R.layout.language_spinner, null);
+        builder.setTitle("Choose your language");
+        languageSpinner = (Spinner)spinnerView.findViewById(R.id.language_spinner_id);
+
+        languageListAdapter = new ArrayAdapter<String>(MainActivity.this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.languageList));
+
+        languageListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(languageListAdapter);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                language = languageSpinner.getSelectedItem().toString();
+                Toast.makeText(MainActivity.this, language,Toast.LENGTH_SHORT).show();
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        builder.setView(spinnerView);
+        AlertDialogActions = builder.create();
+        AlertDialogActions.show();
+
         return language;
     }
-    private Locale setLanguage(String language){
-        Locale lang = new Locale(language);
-        return lang;
-    }
-    //---------------------------
-
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,13 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
             return true;
         }
         if (id == R.id.action_language) {
+            chooseLanguage();
             return true;
         }
 
