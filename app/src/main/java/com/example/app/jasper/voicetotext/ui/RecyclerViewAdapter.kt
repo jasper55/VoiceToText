@@ -59,6 +59,4 @@ class RecyclerViewAdapter(
     interface UserActionClickListener {
         fun onItemClick(position: Int)
     }
-
-
 }

@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:paddingTop="400dp"
-            android:text="...output" />
+            android:text="@string/default_output_text" />
 
         <LinearLayout
             android:paddingStart="4dp"
@@ -88,11 +88,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+
             <TextView
-                android:id="@+id/append"
+                android:id="@+id/replace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="append" />
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:text="replace" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/replace_append_switch"
@@ -100,14 +103,17 @@
                 android:layout_height="@dimen/switch_switch_size"
                 app:track="@drawable/switch_custom_track"
                 android:thumb="@drawable/switch_custom_thumb"
+                android:layout_marginEnd="4dp"
                 android:checked="true"/>
 
-
             <TextView
-                android:id="@+id/replace"
+                android:id="@+id/append"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="replace" />
+                android:textColor="@color/grey"
+                android:text="append" />
+
+
 
             <ImageView
                 android:id="@+id/copyButton"

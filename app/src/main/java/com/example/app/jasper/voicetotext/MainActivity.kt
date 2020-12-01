@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.*
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -33,6 +35,12 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     private lateinit var copyTextButton: ImageView
     private lateinit var current_language: TextView
     private lateinit var search_view: SearchView
+
+    private lateinit var append_Text: TextView
+    private lateinit var replace_Text: TextView
+    private lateinit var isAppendOn: SwitchCompat
+
+
     var isRecording = false
     private val REQ_CODE_SPEECH_INPUT = 100
     private val REQ_LANGUAGE_LIST = 200
@@ -91,12 +99,36 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         copyTextButton = findViewById(R.id.copyButton)
         current_language = findViewById(R.id.current_language)
         current_language.text = currentLanguage
+
+        append_Text = findViewById(R.id.append)
+        replace_Text = findViewById(R.id.replace)
+        isAppendOn = findViewById(R.id.replace_append_switch)
+
+        isAppendOn.isChecked = false
+        isAppendOn.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
+                if (isChecked) {
+                    append_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
+                    append_Text.setTypeface(null, Typeface.BOLD)
+                    replace_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.grey))
+                    replace_Text.setTypeface(null, Typeface.NORMAL)
+                } else {
+                    append_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.grey))
+                    append_Text.setTypeface(null, Typeface.NORMAL)
+                    replace_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
+                    replace_Text.setTypeface(null, Typeface.BOLD)
+                }
+            }
+        })
+
+
+
         initRecyclerView()
         initSearchView()
     }
 
     private fun extractLanguage(lang: String): String {
-        return lang.split("(")[0].replace("\\s".toRegex(),"")
+        return lang.split("(")[0].replace("\\s".toRegex(), "")
     }
 
     private fun initSearchView() {
@@ -161,7 +193,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
             for (lang in supportedLanguages) {
                 langList.add(lang.displayName)
             }
-            sleep(10)
             if (!langList.contains(language.displayName)) {
                 Log.d("LOCALES", "$displayName")
                 supportedLanguages.add(language)
@@ -187,7 +218,20 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         if (requestCode == REQ_CODE_SPEECH_INPUT) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 val result: ArrayList<*> = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                textField.setText(result[0] as CharSequence)
+                if (isAppendOn.isChecked) {
+                    val defaultText = resources.getString(R.string.default_output_text)
+                    var oldText = textField.text.toString()
+                    var newText = ". ${result[0].toString().capitalize()}"
+                    if (oldText == defaultText) {
+                        oldText = ""
+                        newText = "${result[0].toString().capitalize()}"
+                    }
+                    val text = "$oldText$newText"
+                    textField.setText(text as CharSequence)
+
+                } else {
+                    textField.setText(result[0] as CharSequence)
+                }
             }
         }
     }
