@@ -6,9 +6,14 @@
     <color name="colorBackgroundDark">#2a2a2a</color>
     <color name="colorBackgroundLight">#707070</color>
 
+    <color name="grey">#707070</color>
+
     <color name="colorTransBg">#8d000000</color>
 
     <color name="colorWhite">#ffffff</color>
     <color name="bg_gradient_start">#31244e</color>
     <color name="bg_gradient_end">#6b394c</color>
+    <color name="switchThumbColor">#ffffff</color>
+    <color name="colorSwitchCorner">#41bcff</color>
+    <color name="colorSwitchBody">#41bcff</color>
 </resources>

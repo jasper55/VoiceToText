@@ -7,16 +7,16 @@
     android:layout_height="match_parent"
     tools:context="com.example.app.jasper.voicetotext.MainActivity">
 
-    <include layout="@layout/language_spinner"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -27,39 +27,105 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:paddingHorizontal="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:paddingTop="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Language" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/current_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="German"
+                android:textStyle="bold"/>
+
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp">
+
+            </SearchView>
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/textContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:paddingTop="400dp"
+            android:text="...output" />
+
+        <LinearLayout
+            android:paddingStart="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/append"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="append" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/replace_append_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/switch_switch_size"
+                app:track="@drawable/switch_custom_track"
+                android:thumb="@drawable/switch_custom_thumb"
+                android:checked="true"/>
+
+
+            <TextView
+                android:id="@+id/replace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="replace" />
+
+            <ImageView
+                android:id="@+id/copyButton"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:paddingLeft="130dp"
+                android:layout_gravity="end"
+                android:onClick="onClickCopy"
+                android:text="copy text"
+                app:srcCompat="@drawable/ic_file_copy"
+                app:tint="@color/grey" />
+        </LinearLayout>
+
 
         <ImageButton
             android:id="@+id/recordButton"
             style="@android:style/Widget.ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="60dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
             android:background="@drawable/round_btn_60dp"
             android:onClick="onClickRecord"
             android:tint="@color/colorBackgroundDark"
             app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
-        <Button
-            android:id="@+id/copyButton"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/rounded_edges"
-            android:onClick="onClickCopy"
-            android:text="copy text"
-            android:layout_marginTop="30dp"/>
 
-        <EditText
-            android:id="@+id/textContainer"
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="text will be displayed here"
-            android:text="...Textausgabe"/>
-
-
+    </LinearLayout>
     </LinearLayout>
 
 

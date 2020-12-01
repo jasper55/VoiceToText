@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="switch_thumb_size">20dp</dimen>
+    <dimen name="switch_stroke_width">5dp</dimen>
+    <dimen name="switch_corner_radius">20dp</dimen>
+    <dimen name="switch_switch_size">20dp</dimen>
 </resources>

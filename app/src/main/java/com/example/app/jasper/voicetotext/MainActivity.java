@@ -18,7 +18,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.jasper.voicetotext.model.Language;
@@ -32,10 +34,11 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     EditText textField;
-    Button copyTextButton;
+    ImageView copyTextButton;
+    TextView current_language;
     boolean isRecording = false;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     private final int REQ_LANGUAGE_LIST = 200;
@@ -47,9 +50,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public static final String recordAudioPermission = Manifest.permission.RECORD_AUDIO;
     public static final String internetPermission = Manifest.permission.INTERNET;
 
-    String[] langList = {"GERMAN", "ENGLISH", "FRENCH"};
-    String language = "GERMAN";
-    Locale lang;
+    String currentLanguageCode = "de_DE";
+    String currentLanguage = "German";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +61,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setSupportActionBar(toolbar);
         textField = findViewById(R.id.textContainer);
         copyTextButton = findViewById(R.id.copyButton);
+        current_language = findViewById(R.id.current_language);
+        current_language.setText(currentLanguage);
 
         showPermission();
         requestPermission();
-        initLanguageSpinner();
         int i = 1;
         supportedLanguages = new ArrayList<>();
         for (Locale locale : Locale.getAvailableLocales()) {
-//            Log.d("LOCALES", "code: " + locale.getLanguage() + "_" + locale.getCountry());
-//            Log.d("LOCALES", "language : " + locale.getDisplayName());
-//            Log.d("LOCALES", "i : " + i);
+            Log.d("LOCALES", "code: " + locale.getLanguage() + "_" + locale.getCountry());
             Language language = new Language();
             language.setId(i);
             language.setCode(locale.getLanguage() + "_" + locale.getCountry());
@@ -113,15 +114,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String input = textField.getText().toString();
         ClipData clipData = ClipData.newPlainText("input", input);
         clipboard.setPrimaryClip(clipData);
+        Toast.makeText(this, "text copied to clipboard!", Toast.LENGTH_LONG).show();
     }
 
     public void onClickRecord(View view) {
 
         if (!isRecording) {
-
-            //da vom System etwas zurück an die App gegeben werden muss,
-            // muss die Methode startActivityFOrResult aufgerufen werden
-            // requestCode kann frei ausgesucht werden
             try {
                 Intent recordIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 // Art und Weise, welchen Text man als Rückgabe erhällt
@@ -130,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
                 recordIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100);
-                recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, setLanguage(language));
-                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Jetzt Sprechen");
+                recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, currentLanguageCode);
+                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, currentLanguage + "\nSpeak now");
 
                 startActivityForResult(recordIntent, REQ_CODE_SPEECH_INPUT);
                 Toast.makeText(this, "Activity started", Toast.LENGTH_SHORT).show();
@@ -155,20 +153,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    private void initLanguageSpinner() {
-        //get the spinner from the xml.
-        settings_clicked_menu_overlay = findViewById(R.id.settings_clicked_menu_overlay);
-        settings_clicked_menu_dialog = findViewById(R.id.settings_clicked_menu_dialog);
-        Spinner dropdown = findViewById(R.id.language_spinner);
-//create a list of items for the spinner.
-//create an adapter to describe how the items are displayed, adapters are used in several places in android.
-//There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, langList);
-//set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
-        dropdown.setOnItemSelectedListener(this);
-    }
-
     private void requestPermission() {
         int permissionCheck = ContextCompat.checkSelfPermission(this, recordAudioPermission);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -190,9 +174,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    private Locale setLanguage(String language) {
-        return new Locale(language);
-    }
 
 
     @Override
@@ -210,35 +191,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
         if (id == R.id.action_language) {
-            showLanguageSpinner();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showLanguageSpinner() {
-        settings_clicked_menu_overlay.setVisibility(View.VISIBLE);
-        settings_clicked_menu_dialog.setVisibility(View.VISIBLE);
-    }
-
-    private void hideLanguageSpinner() {
-        settings_clicked_menu_overlay.setVisibility(View.GONE);
-        settings_clicked_menu_dialog.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        int position = adapterView.getCount();
-        language = langList[position-1];
-        setLanguage(language);
-        hideLanguageSpinner();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        hideLanguageSpinner();
-
     }
 
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <stroke
+        android:width="@dimen/switch_stroke_width"
+        android:color="@color/colorSwitchCorner"/>
+    <solid
+        android:color="@color/colorSwitchBody"/>
+    <corners
+        android:radius="@dimen/switch_corner_radius"/>
+</shape>
