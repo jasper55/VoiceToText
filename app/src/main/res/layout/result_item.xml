@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/item_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity=" "
+        android:paddingVertical="5dp"
+        android:foreground="?attr/selectableItemBackground"
+        tools:context=".MainActivity"
+        tools:showIn="@layout/layout_main">
+
+
+
+        <TextView
+            android:id="@+id/list_item_language"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"/>
+
+
+    </LinearLayout>
+</layout>
