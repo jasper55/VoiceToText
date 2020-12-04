@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.jasper.voicetotext.model.Language
 import com.example.app.jasper.voicetotext.ui.RecyclerViewAdapter
+import com.example.app.jasper.voicetotext.ui.hideSoftKeyboard
 import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.ArrayList
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     private fun initView() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        textField = findViewById(R.id.textContainer)
+        textField = findViewById(R.id.output_container)
         copyTextButton = findViewById(R.id.copyButton)
         current_language = findViewById(R.id.current_language)
         current_language.text = currentLanguage
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(textEntered: String): Boolean {
                 viewModel.sortListBy(textEntered.toLowerCase())
+                hideSoftKeyboard()
 //                hideKeyboard()
                 return false
             }
@@ -147,6 +149,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         })
 
         search_view.setOnCloseListener {
+            hideSoftKeyboard()
 //            hideKeyboard()
             recyclerView.visibility = View.GONE
             true

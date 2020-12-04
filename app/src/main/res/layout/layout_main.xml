@@ -1,148 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.app.jasper.voicetotext.MainActivity">
+    android:layout_height="match_parent">
 
 
 
-    <LinearLayout
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="50dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="?attr/actionBarSize"
+            android:layout_margin="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="16dp"
+            android:adjustViewBounds="true"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:adjustViewBounds="true"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:paddingHorizontal="32dp"
+    <TextView
+        android:id="@+id/header_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Language"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBar" />
+
+    <TextView
+        android:id="@+id/current_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:text="German"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/search_view" />
+
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:gravity="top"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/header_language"
+        app:layout_constraintStart_toEndOf="@id/current_language"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
-
-        <TextView
-            android:paddingTop="32dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="Language" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/current_language"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="German"
-                android:textStyle="bold"/>
-
-            <SearchView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp">
-
-            </SearchView>
-
-        </LinearLayout>
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_view"
+        app:layout_constraintBottom_toTopOf="@id/output_container"/>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <EditText
+        android:id="@+id/output_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/default_output_text"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/replace"/>
 
 
-        <EditText
-            android:id="@+id/textContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:paddingTop="400dp"
-            android:text="@string/default_output_text" />
+    <TextView
+        android:id="@+id/replace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/cabin"
+        android:text="replace"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/recordButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
-            android:paddingStart="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/replace_append_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/switch_switch_size"
+        android:checked="true"
+        android:thumb="@drawable/switch_custom_thumb"
+        app:track="@drawable/switch_custom_track"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toEndOf="@id/replace"
+        app:layout_constraintBottom_toTopOf="@id/recordButton"/>
 
+    <TextView
+        android:id="@+id/append"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/allerta"
+        android:text="append"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toTopOf="@id/recordButton"
+        app:layout_constraintStart_toEndOf="@id/replace_append_switch" />
 
-            <TextView
-                android:id="@+id/replace"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:text="replace" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/replace_append_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/switch_switch_size"
-                app:track="@drawable/switch_custom_track"
-                android:thumb="@drawable/switch_custom_thumb"
-                android:layout_marginEnd="4dp"
-                android:checked="true"/>
-
-            <TextView
-                android:id="@+id/append"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                android:text="append" />
+    <ImageView
+        android:id="@+id/copyButton"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:onClick="onClickCopy"
+        android:text="copy text"
+        app:srcCompat="@drawable/ic_file_copy"
+        app:tint="@color/grey"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recordButton"/>
 
 
 
-            <ImageView
-                android:id="@+id/copyButton"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:paddingLeft="130dp"
-                android:layout_gravity="end"
-                android:onClick="onClickCopy"
-                android:text="copy text"
-                app:srcCompat="@drawable/ic_file_copy"
-                app:tint="@color/grey" />
-        </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/recordButton"
+        style="@android:style/Widget.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@drawable/round_btn_60dp"
+        android:onClick="onClickRecord"
+        android:tint="@color/colorBackgroundDark"
+        app:srcCompat="@android:drawable/ic_btn_speak_now"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
-        <ImageButton
-            android:id="@+id/recordButton"
-            style="@android:style/Widget.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/round_btn_60dp"
-            android:onClick="onClickRecord"
-            android:tint="@color/colorBackgroundDark"
-            app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
 
-    </LinearLayout>
-    </LinearLayout>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
