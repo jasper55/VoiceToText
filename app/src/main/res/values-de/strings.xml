@@ -13,4 +13,5 @@
     <string name="permission_granted">Zugriff auf Microphon erlaubt</string>
     <string name="permission_denied">Zugriff auf Microphon verweigert</string>
     <string name="current_language">%1$s wurde als neue Sprache ausgewählt</string>
+    <string name="empty_text">" "</string>
 </resources>

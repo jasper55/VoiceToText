@@ -14,4 +14,5 @@
     <string name="permission_granted">permission just granted</string>
     <string name="permission_denied">permission just denied</string>
     <string name="current_language">%1$s has been setted as new language</string>
+    <string name="empty_text">" "</string>
 </resources>

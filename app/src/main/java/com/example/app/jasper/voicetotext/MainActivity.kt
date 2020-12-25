@@ -106,8 +106,13 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
             }
 
             override fun onQueryTextChange(textEntered: String): Boolean {
-                viewModel.sortListBy(textEntered.toLowerCase())
-                return true
+                if (textEntered == getString(R.string.empty_text)) {
+                    search_view.setIconified(true)
+                    return true
+                } else {
+                    viewModel.sortListBy(textEntered.toLowerCase())
+                    return true
+                }
             }
         })
         search_view.setOnSearchClickListener { hideBottomUi() }
@@ -135,6 +140,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                 val text: String = getString((R.string.current_language), extractLanguage(viewModel.currentLocale.value!!.displayName))
                 showSnackBarWithText(binding.root,text)
                 hideSoftKeyboard()
+                search_view.setQuery(getString(R.string.empty_text),false)
+                search_view.isIconified = true
                 showBottomUi()
                 search_view.clearFocus()
             }
