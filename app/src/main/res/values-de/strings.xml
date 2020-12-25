@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Einstellungen</string>
+    <string name="default_output_text">...Text Ausgabe</string>
+    <string name="append">anhängen</string>
+    <string name="replace">ersetzen</string>
+    <string name="language">Sprache</string>
+    <string name="german">Deutsch</string>
+    <string name="text_copied_to_clipboard">Text wurde in die Zwischenablage kopiert!</string>
+    <string name="grant_rights_to_microphone">Falls du die App richtig verwenden möchtest, musst die ihr die Rechte für das Benutzen des Mikrofons erteilen</string>
+</resources>

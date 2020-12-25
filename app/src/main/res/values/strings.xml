@@ -1,5 +1,11 @@
 <resources>
-    <string name="app_name">VoiceToText</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name" translatable="false">VoiceToText</string>
     <string name="default_output_text">...text output</string>
+    <string name="action_settings">Settings</string>
+    <string name="append">append</string>
+    <string name="replace">replace</string>
+    <string name="language">Language</string>
+    <string name="german">German</string>
+    <string name="text_copied_to_clipboard">text copied to clipboard!</string>
+    <string name="grant_rights_to_microphone">If you want to use the app, you need to give rights to access the microphone</string>
 </resources>

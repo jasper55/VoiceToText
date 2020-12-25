@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     var settings_clicked_menu_overlay: View? = null
     private lateinit var supportedLanguages: ArrayList<Language>
     var currentLanguageCode = "de_DE"
-    var currentLanguage = "German"
+    var currentLanguage = ""
     private lateinit var viewModel: ViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: RecyclerViewAdapter
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         val input = output_container.text.toString()
         val clipData = ClipData.newPlainText("input", input)
         clipboard.setPrimaryClip(clipData)
-        Toast.makeText(this, "text copied to clipboard!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, R.string.text_copied_to_clipboard, Toast.LENGTH_LONG).show()
     }
 
     fun onClickRecord() {
@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
             return
         }
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, recordAudioPermission)) {
-            Toast.makeText(this, "Falls du die App richtig verwenden möchtest, musst die ihr die Rechte für das Benutzen des Mikrofons erteilen", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.grant_rights_to_microphone, Toast.LENGTH_LONG).show()
         }
         ActivityCompat.requestPermissions(this, arrayOf(recordAudioPermission, internetPermission), REQ_CODE_SPEECH_INPUT)
     }

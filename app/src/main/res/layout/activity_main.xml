@@ -40,7 +40,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/architects_daughter"
-        android:text="Language"
+        android:text="@string/language"
         android:textAlignment="viewStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
-        android:text="German"
+        android:text="@string/german"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/search_view" />
@@ -103,7 +103,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/cabin"
-        android:text="replace"
+        android:text="@string/replace"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/recordButton"
@@ -129,7 +129,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/allerta"
-        android:text="append"
+        android:text="@string/append"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toTopOf="@id/recordButton"
         app:layout_constraintStart_toEndOf="@id/replace_append_switch" />
@@ -154,7 +154,6 @@
         android:layout_height="20dp"
         android:layout_gravity="end"
         android:onClick="onClickCopy"
-        android:text="copy text"
         app:srcCompat="@drawable/ic_file_copy"
         app:tint="@color/grey"
         android:layout_marginEnd="16dp"
