@@ -8,4 +8,5 @@
     <string name="german">Deutsch</string>
     <string name="text_copied_to_clipboard">Text wurde in die Zwischenablage kopiert!</string>
     <string name="grant_rights_to_microphone">Falls du die App richtig verwenden möchtest, musst die ihr die Rechte für das Benutzen des Mikrofons erteilen</string>
+    <string name="speak_now">Jetzt sprechen</string>
 </resources>

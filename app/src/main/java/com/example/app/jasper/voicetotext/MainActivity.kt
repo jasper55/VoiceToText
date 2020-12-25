@@ -203,7 +203,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                 recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                 recordIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100)
                 recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, currentLanguageCode)
-                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "${viewModel.currentLanguage.value!!.displayName}\nSpeak now")
+
+                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "${viewModel.currentLanguage.value!!.displayName}" +
+                        "\n" +
+                        R.string.speak_now)
                 startActivityForResult(recordIntent, REQ_CODE_SPEECH_INPUT)
                 Toast.makeText(this, "Activity started", Toast.LENGTH_SHORT).show()
             } catch (e: ActivityNotFoundException) {

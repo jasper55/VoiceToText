@@ -8,4 +8,5 @@
     <string name="german">German</string>
     <string name="text_copied_to_clipboard">text copied to clipboard!</string>
     <string name="grant_rights_to_microphone">If you want to use the app, you need to give rights to access the microphone</string>
+    <string name="speak_now">Speak now</string>
 </resources>
