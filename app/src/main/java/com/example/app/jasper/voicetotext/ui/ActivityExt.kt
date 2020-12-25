@@ -21,11 +21,13 @@ fun Activity.hideSoftKeyboard() {
 
 fun Activity.showSnackBarWithText(view: View,text: String) {
     Snackbar.make(view, text, Snackbar.LENGTH_LONG)
-            .setAction("CLOSE", object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    v.visibility = View.GONE
-                }
+            .show()
+}
 
+fun Activity.showSnackBarWithCancel(view: View,text: String) {
+    Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+            .setAction("CLOSE", object : View.OnClickListener {
+                override fun onClick(v: View) { v.visibility = View.GONE }
             })
             .setActionTextColor(resources.getColor(R.color.holo_red_light))
             .show()

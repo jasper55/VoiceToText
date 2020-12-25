@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.SearchView
 import android.widget.Toast
@@ -51,10 +52,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         showPermission()
         requestPermission()
-
         getSupportedLanguages()
 
         viewModel = ViewModelProvider(this).get(ViewModel::class.java)
@@ -71,7 +70,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         current_language.text = currentLanguage
-
 
         replace_append_switch.isChecked = false
         replace_append_switch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
@@ -107,8 +105,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
             override fun onQueryTextChange(textEntered: String): Boolean {
                 if (textEntered == getString(R.string.empty_text)) {
-                    search_view.setIconified(true)
-                    return true
+                    return false
                 } else {
                     viewModel.sortListBy(textEntered.toLowerCase())
                     return true
@@ -116,6 +113,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
             }
         })
         search_view.setOnSearchClickListener { hideBottomUi() }
+
+
 
         search_view.setOnCloseListener {
             hideSoftKeyboard()
@@ -136,14 +135,16 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         userActionClickListener = object : RecyclerViewAdapter.UserActionClickListener {
             override fun onItemClick(position: Int) {
                 viewModel.setCurrentLocale(viewModel.resultList.value!![position])
-                recyclerView.visibility = View.GONE
                 val text: String = getString((R.string.current_language), extractLanguage(viewModel.currentLocale.value!!.displayName))
                 showSnackBarWithText(binding.root,text)
                 hideSoftKeyboard()
-                search_view.setQuery(getString(R.string.empty_text),false)
-                search_view.isIconified = true
+                if (!search_view.isIconified) {
+                    search_view.isIconified = true
+                }
+//                search_view.setQuery(getString(R.string.empty_text),false)
                 showBottomUi()
                 search_view.clearFocus()
+                recyclerView.visibility = View.GONE
             }
         }
         recyclerViewAdapter = RecyclerViewAdapter(userActionClickListener, viewModel.filteredList, viewModel)
