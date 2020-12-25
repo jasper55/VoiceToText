@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
     var isRecording = false
     private val REQ_CODE_SPEECH_INPUT = 100
-    private val REQ_LANGUAGE_LIST = 200
     var settings_clicked_menu_dialog: CardView? = null
     var settings_clicked_menu_overlay: View? = null
     private lateinit var supportedLanguages: ArrayList<Language>
@@ -69,25 +68,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
         observeLiveData()
     } // onCreate()
-
-
-    private fun setInitialLanguage() {
-        val initialLang = Language()
-        val locale = Locale.getDefault()
-        initialLang.code = locale.language + "_" + locale.country
-        initialLang.displayName = extractLanguage(locale.displayName)
-        viewModel.setCurrentLanguage(initialLang)
-    }
-
-    private fun hideKeyboard() {
-        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-    }
-
-    private fun hideKeyboard(view: View) {
-        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
 
 
     private fun initView() {
@@ -166,34 +146,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         recyclerView.adapter = recyclerViewAdapter
     }
 
-    private fun getSupportedLanguages() {
-        supportedLanguages = ArrayList()
-        val langList = ArrayList<String>()
-
-        for (locale in Locale.getAvailableLocales()) {
-//            Log.d("LOCALES", "code: " + locale.language + "_" + locale.country)
-            val language = Language()
-            language.code = locale.language + "_" + locale.country
-
-            val displayName = extractLanguage(locale.displayName)
-//                    .toRegex()).toTypedArray()
-//            Log.d("LOCALES", "${displayName[0]}")
-            if (displayName == "Niederdeutsch") {
-                language.displayName = "Deutsch"
-            } else {
-                language.displayName = displayName
-            }
-
-            for (lang in supportedLanguages) {
-                langList.add(lang.displayName)
-            }
-            if (!langList.contains(language.displayName)) {
-                Log.d("LOCALES", "$displayName")
-                supportedLanguages.add(language)
-            }
-        }
-    }
-
     private fun observeLiveData() {
         viewModel.resultList.observe(this, Observer { resultList: List<Language> ->
             recyclerView.visibility = View.VISIBLE
@@ -230,17 +182,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQ_CODE_SPEECH_INPUT -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "permission just granted", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "permission just denied", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
 
-    fun onClickCopy(view: View?) {
+    fun onClickCopy() {
         val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val input = output_container.text.toString()
         val clipData = ClipData.newPlainText("input", input)
@@ -248,7 +191,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         Toast.makeText(this, "text copied to clipboard!", Toast.LENGTH_LONG).show()
     }
 
-    fun onClickRecord(view: View?) {
+    fun onClickRecord() {
         if (!isRecording) {
             try {
                 val recordIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -277,6 +220,16 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            REQ_CODE_SPEECH_INPUT -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "permission just granted", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "permission just denied", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     private fun requestPermission() {
         val permissionCheck = ContextCompat.checkSelfPermission(this, recordAudioPermission)
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -298,6 +251,43 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         }
     }
 
+    override fun onItemClick(position: Int) {
+        currentLanguage = recyclerViewAdapter.getItem(position).displayName
+    }
+
+    private fun setInitialLanguage() {
+        val initialLang = Language()
+        val locale = Locale.getDefault()
+        initialLang.code = locale.language + "_" + locale.country
+        initialLang.displayName = extractLanguage(locale.displayName)
+        viewModel.setCurrentLanguage(initialLang)
+    }
+
+    private fun getSupportedLanguages() {
+        supportedLanguages = ArrayList()
+        val langList = ArrayList<String>()
+
+        for (locale in Locale.getAvailableLocales()) {
+            val language = Language()
+            language.code = locale.language + "_" + locale.country
+
+            val displayName = extractLanguage(locale.displayName)
+            if (displayName == "Niederdeutsch") {
+                language.displayName = "Deutsch"
+            } else {
+                language.displayName = displayName
+            }
+
+            for (lang in supportedLanguages) {
+                langList.add(lang.displayName)
+            }
+            if (!langList.contains(language.displayName)) {
+                Log.d("LOCALES", "$displayName")
+                supportedLanguages.add(language)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -316,9 +306,5 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     companion object {
         const val recordAudioPermission = Manifest.permission.RECORD_AUDIO
         const val internetPermission = Manifest.permission.INTERNET
-    }
-
-    override fun onItemClick(position: Int) {
-        currentLanguage = recyclerViewAdapter.getItem(position).displayName
     }
 }
