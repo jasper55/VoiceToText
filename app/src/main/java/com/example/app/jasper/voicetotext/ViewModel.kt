@@ -10,10 +10,10 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     val fullList = ArrayList<Language>()
     val filteredList = ArrayList<Language>()
     val resultList = MutableLiveData<List<Language>>()
-    val currentLanguage = MutableLiveData<Language>()
+    val currentLocale = MutableLiveData<Language>()
 
-    fun setCurrentLanguage(language: Language) {
-        currentLanguage.value = language
+    fun setCurrentLocale(language: Language) {
+        currentLocale.value = language
     }
 
     fun sortListBy(textEntered: String) {

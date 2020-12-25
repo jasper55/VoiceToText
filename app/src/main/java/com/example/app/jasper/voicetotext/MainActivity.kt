@@ -8,9 +8,6 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.SearchView
@@ -133,8 +130,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     private fun initRecyclerView() {
         userActionClickListener = object : RecyclerViewAdapter.UserActionClickListener {
             override fun onItemClick(position: Int) {
-                viewModel.setCurrentLanguage(viewModel.resultList.value!![position])
+                viewModel.setCurrentLocale(viewModel.resultList.value!![position])
                 recyclerView.visibility = View.GONE
+                val text: String = getString((R.string.current_language), extractLanguage(viewModel.currentLocale.value!!.displayName))
+                showSnackBarWithText(binding.root,text)
                 hideSoftKeyboard()
                 showBottomUi()
                 search_view.clearFocus()
@@ -151,7 +150,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
             recyclerView.visibility = View.VISIBLE
             recyclerViewAdapter.setList(resultList)
         })
-        viewModel.currentLanguage.observe(this, Observer { currentLanguage: Language ->
+        viewModel.currentLocale.observe(this, Observer { currentLanguage: Language ->
             current_language.text = currentLanguage.displayName
             currentLanguage.code?.let {
                 currentLanguageCode = it
@@ -174,7 +173,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                     }
                     val text = "$oldText$newText"
                     output_container.setText(text as CharSequence)
-
                 } else {
                     output_container.setText(result[0] as CharSequence)
                 }
@@ -203,11 +201,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                 recordIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100)
                 recordIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, currentLanguageCode)
 
-                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "${viewModel.currentLanguage.value!!.displayName}" +
+                recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "${viewModel.currentLocale.value!!.displayName}" +
                         "\n" +
                         R.string.speak_now)
                 startActivityForResult(recordIntent, REQ_CODE_SPEECH_INPUT)
-                Toast.makeText(this, "Activity started", Toast.LENGTH_SHORT).show()
             } catch (e: ActivityNotFoundException) {
                 val appPackageName = "com.google.android.googlequicksearchbox"
                 Toast.makeText(this, "Activity not found", Toast.LENGTH_LONG).show()
@@ -226,10 +223,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            REQ_CODE_SPEECH_INPUT -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "permission just granted", Toast.LENGTH_LONG).show()
+            REQ_CODE_SPEECH_INPUT -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showSnackBarWithText(binding.root,getString(R.string.permission_granted))
             } else {
-                Toast.makeText(this, "permission just denied", Toast.LENGTH_LONG).show()
+                showSnackBarWithText(binding.root,getString(R.string.permission_denied))
             }
         }
     }
@@ -264,7 +261,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         val locale = Locale.getDefault()
         initialLang.code = locale.language + "_" + locale.country
         initialLang.displayName = extractLanguage(locale.displayName)
-        viewModel.setCurrentLanguage(initialLang)
+        viewModel.setCurrentLocale(initialLang)
     }
 
     private fun getSupportedLanguages() {
@@ -286,7 +283,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                 langList.add(lang.displayName)
             }
             if (!langList.contains(language.displayName)) {
-                Log.d("LOCALES", "$displayName")
                 supportedLanguages.add(language)
             }
         }

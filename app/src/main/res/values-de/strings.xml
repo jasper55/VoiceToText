@@ -10,4 +10,7 @@
     <string name="grant_rights_to_microphone">Falls du die App richtig verwenden möchtest, musst die ihr die Rechte für das Benutzen des Mikrofons erteilen</string>
     <string name="speak_now">Jetzt sprechen</string>
     <string name="share_subject">Text teilen über</string>
+    <string name="permission_granted">Zugriff auf Microphon erlaubt</string>
+    <string name="permission_denied">Zugriff auf Microphon verweigert</string>
+    <string name="current_language">%1$s wurde als neue Sprache ausgewählt</string>
 </resources>
