@@ -8,15 +8,14 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.CompoundButton
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -291,6 +290,13 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                 supportedLanguages.add(language)
             }
         }
+    }
+
+    fun shareText(view: View) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, output_container.text.toString())
+        startActivity(Intent.createChooser(intent, getString(R.string.share_subject)))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

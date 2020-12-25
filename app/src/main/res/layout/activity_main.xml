@@ -142,6 +142,7 @@
         android:layout_height="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
+        android:onClick="shareText"
         app:layout_constraintBottom_toTopOf="@+id/recordButton"
         app:layout_constraintEnd_toStartOf="@+id/copyButton"
         app:srcCompat="@drawable/ic_share" />
