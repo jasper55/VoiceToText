@@ -23,9 +23,8 @@ android {
     }
     productFlavors {
     }
-    dataBinding {
-        enabled = true
-    }
+    dataBinding { enabled = true}
+    viewBinding { enabled = true}
 }
 
 configurations.all {

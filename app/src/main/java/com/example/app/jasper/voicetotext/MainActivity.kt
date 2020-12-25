@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -24,23 +25,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app.jasper.voicetotext.databinding.ActivityMainBinding
 import com.example.app.jasper.voicetotext.model.Language
 import com.example.app.jasper.voicetotext.ui.RecyclerViewAdapter
 import com.example.app.jasper.voicetotext.ui.hideSoftKeyboard
-import java.lang.Thread.sleep
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickListener {
-    private lateinit var textField: EditText
-    private lateinit var copyTextButton: ImageView
-    private lateinit var current_language: TextView
-    private lateinit var search_view: SearchView
-
-    private lateinit var append_Text: TextView
-    private lateinit var replace_Text: TextView
-    private lateinit var isAppendOn: SwitchCompat
-
+    private lateinit var binding: ActivityMainBinding
 
     var isRecording = false
     private val REQ_CODE_SPEECH_INPUT = 100
@@ -58,7 +52,9 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
         showPermission()
         requestPermission()
@@ -73,6 +69,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
         observeLiveData()
     } // onCreate()
+
 
     private fun setInitialLanguage() {
         val initialLang = Language()
@@ -96,33 +93,25 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     private fun initView() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        textField = findViewById(R.id.output_container)
-        copyTextButton = findViewById(R.id.copyButton)
-        current_language = findViewById(R.id.current_language)
-        current_language.text = currentLanguage
+        current_language.text = currentLanguage.toString()
 
-        append_Text = findViewById(R.id.append)
-        replace_Text = findViewById(R.id.replace)
-        isAppendOn = findViewById(R.id.replace_append_switch)
 
-        isAppendOn.isChecked = false
-        isAppendOn.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+        replace_append_switch.isChecked = false
+        replace_append_switch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
                 if (isChecked) {
-                    append_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
-                    append_Text.setTypeface(null, Typeface.BOLD)
-                    replace_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.grey))
-                    replace_Text.setTypeface(null, Typeface.NORMAL)
+                    append.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
+                    append.setTypeface(null, Typeface.BOLD)
+                    replace.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.grey))
+                    replace.setTypeface(null, Typeface.NORMAL)
                 } else {
-                    append_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.grey))
-                    append_Text.setTypeface(null, Typeface.NORMAL)
-                    replace_Text.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
-                    replace_Text.setTypeface(null, Typeface.BOLD)
+                    append.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.grey))
+                    append.setTypeface(null, Typeface.NORMAL)
+                    replace.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
+                    replace.setTypeface(null, Typeface.BOLD)
                 }
             }
         })
-
-
 
         initRecyclerView()
         initSearchView()
@@ -133,7 +122,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     }
 
     private fun initSearchView() {
-        search_view = findViewById(R.id.search_view)
         search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(textEntered: String): Boolean {
                 viewModel.sortListBy(textEntered.toLowerCase())
@@ -155,18 +143,21 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
             true
         }
 
-//        search_view.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-//            if (!hasFocus) {
+        search_view.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
 //                hideKeyboard(view)
-//            }
-//        }
+                hideSoftKeyboard()
+            }
+        }
     }
-
+    
     private fun initRecyclerView() {
         userActionClickListener = object : RecyclerViewAdapter.UserActionClickListener {
             override fun onItemClick(position: Int) {
                 viewModel.setCurrentLanguage(viewModel.resultList.value!![position])
                 recyclerView.visibility = View.GONE
+                hideSoftKeyboard()
+                search_view.clearFocus()
             }
         }
         recyclerViewAdapter = RecyclerViewAdapter(userActionClickListener, viewModel.filteredList, viewModel)
@@ -221,19 +212,19 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         if (requestCode == REQ_CODE_SPEECH_INPUT) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 val result: ArrayList<*> = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (isAppendOn.isChecked) {
+                if (replace_append_switch.isChecked) {
                     val defaultText = resources.getString(R.string.default_output_text)
-                    var oldText = textField.text.toString()
+                    var oldText = output_container.text.toString()
                     var newText = ". ${result[0].toString().capitalize()}"
                     if (oldText == defaultText) {
                         oldText = ""
                         newText = "${result[0].toString().capitalize()}"
                     }
                     val text = "$oldText$newText"
-                    textField.setText(text as CharSequence)
+                    output_container.setText(text as CharSequence)
 
                 } else {
-                    textField.setText(result[0] as CharSequence)
+                    output_container.setText(result[0] as CharSequence)
                 }
             }
         }
@@ -251,7 +242,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
     fun onClickCopy(view: View?) {
         val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val input = textField.text.toString()
+        val input = output_container.text.toString()
         val clipData = ClipData.newPlainText("input", input)
         clipboard.setPrimaryClip(clipData)
         Toast.makeText(this, "text copied to clipboard!", Toast.LENGTH_LONG).show()

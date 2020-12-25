@@ -12,7 +12,7 @@
         android:paddingVertical="5dp"
         android:foreground="?attr/selectableItemBackground"
         tools:context=".MainActivity"
-        tools:showIn="@layout/layout_main">
+        tools:showIn="@layout/activity_main">
 
 
 
