@@ -299,20 +299,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         startActivity(Intent.createChooser(intent, getString(R.string.share_subject)))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.action_settings) {
-            return true
-        }
-        return if (id == R.id.action_language) {
-            true
-        } else super.onOptionsItemSelected(item)
-    }
 
     companion object {
         const val recordAudioPermission = Manifest.permission.RECORD_AUDIO
