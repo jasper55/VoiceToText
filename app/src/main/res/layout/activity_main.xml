@@ -7,9 +7,6 @@
     android:layout_height="match_parent">
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="com.example.app.jasper.voicetotext.ui.MoveUpwardBehavior">
@@ -106,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:fontFamily="@font/cabin"
         android:text="@string/replace"
         android:textColor="@color/colorAccent"
@@ -118,21 +115,20 @@
         android:id="@+id/replace_append_switch"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/switch_switch_size"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="32dp"
         android:checked="true"
         android:thumb="@drawable/switch_custom_thumb"
-        app:track="@drawable/switch_custom_track"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/recordButton"
         app:layout_constraintStart_toEndOf="@id/replace"
-        app:layout_constraintBottom_toTopOf="@id/recordButton"/>
+        app:track="@drawable/switch_custom_track" />
 
     <TextView
         android:id="@+id/append"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:fontFamily="@font/allerta"
         android:text="@string/append"
         android:textColor="@color/grey"
@@ -140,15 +136,12 @@
         app:layout_constraintStart_toEndOf="@id/replace_append_switch" />
 
 
-
-
-
     <ImageView
         android:id="@+id/shareButton"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/recordButton"
         app:layout_constraintEnd_toStartOf="@+id/copyButton"
         app:srcCompat="@drawable/ic_share" />
@@ -158,14 +151,13 @@
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_gravity="end"
-        android:onClick="onClickCopy"
-        app:srcCompat="@drawable/ic_file_copy"
-        app:tint="@color/grey"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
+        android:onClick="onClickCopy"
+        app:layout_constraintBottom_toTopOf="@id/recordButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recordButton"/>
+        app:srcCompat="@drawable/ic_file_copy"
+        app:tint="@color/grey" />
 
 
 
