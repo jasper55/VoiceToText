@@ -29,6 +29,7 @@ import com.example.app.jasper.voicetotext.databinding.ActivityMainBinding
 import com.example.app.jasper.voicetotext.model.Language
 import com.example.app.jasper.voicetotext.ui.RecyclerViewAdapter
 import com.example.app.jasper.voicetotext.ui.hideSoftKeyboard
+import com.example.app.jasper.voicetotext.ui.showSnackBarWithText
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -183,12 +184,13 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     }
 
 
+
     fun onClickCopy(view: View) {
         val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val input = output_container.text.toString()
         val clipData = ClipData.newPlainText("input", input)
         clipboard.setPrimaryClip(clipData)
-        Toast.makeText(this, R.string.text_copied_to_clipboard, Toast.LENGTH_LONG).show()
+        showSnackBarWithText(binding.root,getString(R.string.text_copied_to_clipboard))
     }
 
     fun onClickRecord(view: View) {
