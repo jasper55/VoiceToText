@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     }
 
 
-    fun onClickCopy() {
+    fun onClickCopy(view: View) {
         val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val input = output_container.text.toString()
         val clipData = ClipData.newPlainText("input", input)
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         Toast.makeText(this, R.string.text_copied_to_clipboard, Toast.LENGTH_LONG).show()
     }
 
-    fun onClickRecord() {
+    fun onClickRecord(view: View) {
         if (!isRecording) {
             try {
                 val recordIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
