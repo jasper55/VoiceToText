@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
     private fun initView() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        current_language.text = currentLanguage.toString()
+        current_language.text = currentLanguage
 
 
         replace_append_switch.isChecked = false
@@ -125,8 +125,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
         search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(textEntered: String): Boolean {
                 viewModel.sortListBy(textEntered.toLowerCase())
-                hideSoftKeyboard()
-//                hideKeyboard()
                 return false
             }
 
@@ -135,28 +133,30 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                 return true
             }
         })
+        search_view.setOnSearchClickListener { hideBottomUi() }
 
         search_view.setOnCloseListener {
             hideSoftKeyboard()
-//            hideKeyboard()
+            showBottomUi()
             recyclerView.visibility = View.GONE
             true
         }
-
-        search_view.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-//                hideKeyboard(view)
-                hideSoftKeyboard()
-            }
-        }
     }
-    
+    private fun hideBottomUi() {
+        bottom_group.visibility = View.GONE
+    }
+
+    private fun showBottomUi() {
+        bottom_group.visibility = View.VISIBLE
+    }
+
     private fun initRecyclerView() {
         userActionClickListener = object : RecyclerViewAdapter.UserActionClickListener {
             override fun onItemClick(position: Int) {
                 viewModel.setCurrentLanguage(viewModel.resultList.value!![position])
                 recyclerView.visibility = View.GONE
                 hideSoftKeyboard()
+                showBottomUi()
                 search_view.clearFocus()
             }
         }
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
                     var newText = ". ${result[0].toString().capitalize()}"
                     if (oldText == defaultText) {
                         oldText = ""
-                        newText = "${result[0].toString().capitalize()}"
+                        newText = result[0].toString().capitalize()
                     }
                     val text = "$oldText$newText"
                     output_container.setText(text as CharSequence)

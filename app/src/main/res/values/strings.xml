@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">VoiceToText</string>
     <string name="action_settings">Settings</string>
-    <string name="default_output_text">...output</string>
+    <string name="default_output_text">...text output</string>
 </resources>
