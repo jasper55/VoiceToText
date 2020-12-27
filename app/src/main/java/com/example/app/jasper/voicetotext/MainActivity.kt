@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewAdapter.UserActionClickLis
 
                 recordIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "${viewModel.currentLocale.value!!.displayName}" +
                         "\n" +
-                        R.string.speak_now)
+                        getString(R.string.speak_now))
                 startActivityForResult(recordIntent, REQ_CODE_SPEECH_INPUT)
             } catch (e: ActivityNotFoundException) {
                 val appPackageName = "com.google.android.googlequicksearchbox"
